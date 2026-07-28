@@ -1137,6 +1137,94 @@
       }
     }
 
+    @media (orientation: landscape) and (min-width: 660px) and (max-height: 600px) {
+      .site-header {
+        padding-top: calc(14px + env(safe-area-inset-top));
+        padding-bottom: 14px;
+      }
+
+      .brand-row {
+        margin-bottom: 4px;
+      }
+
+      .brand-mark {
+        width: 36px;
+        height: 36px;
+        border-radius: 12px;
+      }
+
+      h1 {
+        font-size: clamp(1.7rem, 3.6vw, 2.2rem);
+      }
+
+      .header-copy {
+        margin-top: 5px;
+        font-size: .88rem;
+      }
+
+      .page-shell {
+        padding-inline: 16px;
+      }
+
+      .learning-grid {
+        grid-template-columns: minmax(0, 1.08fr) minmax(280px, .92fr);
+        gap: 14px;
+      }
+
+      .panel-pad {
+        padding: 18px;
+      }
+
+      .section-heading {
+        gap: 9px;
+        margin-bottom: 14px;
+      }
+
+      .step-badge {
+        min-width: 50px;
+        height: 27px;
+        font-size: .67rem;
+      }
+
+      .section-heading h2 {
+        font-size: clamp(1rem, 2.4vw, 1.25rem);
+      }
+
+      .section-heading p {
+        font-size: .8rem;
+        line-height: 1.5;
+      }
+
+      .drag-hint {
+        margin-top: 8px;
+        font-size: .73rem;
+      }
+
+      .angle-selector {
+        margin-top: 12px;
+      }
+
+      .current-angle-card {
+        padding: 14px;
+      }
+
+      .current-angle-card strong {
+        font-size: clamp(2rem, 5vw, 2.6rem);
+      }
+
+      .value-heading {
+        margin-top: 16px;
+      }
+
+      .coordinate-grid {
+        gap: 7px;
+      }
+
+      .site-footer {
+        margin-top: 16px;
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       *,
       *::before,
