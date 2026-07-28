@@ -131,15 +131,21 @@
       display: inline-block;
     }
 
-    .inline-math {
+    .math-expression {
       display: inline-block;
       color: inherit;
       font-family: "STIX Two Math", "Cambria Math", "Times New Roman", serif;
       font-size: 1.04em;
       font-weight: inherit;
-      line-height: 1;
-      vertical-align: -.06em;
       white-space: nowrap;
+    }
+
+    .math-expression var,
+    .coordinate-card .symbol var {
+      color: inherit;
+      font-family: inherit;
+      font-style: italic;
+      font-weight: inherit;
     }
 
     .math-axis-label {
@@ -1187,7 +1193,7 @@
           <p class="eyebrow">TRIGONOMETRY LAB</p>
         </div>
         <h1><span class="text-chunk">円を動かして、</span><wbr><span class="text-chunk">三角関数を学ぼう。</span></h1>
-        <p class="header-copy"><span class="text-chunk">点Pを動かして、</span><wbr><span class="text-chunk"><math class="inline-math" aria-label="x、y、r"><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>r</mi></math> の比を確かめます。</span></p>
+        <p class="header-copy"><span class="text-chunk">点Pを動かして、</span><wbr><span class="text-chunk"><span class="math-expression" aria-label="x、y、r"><var>x</var>, <var>y</var>, <var>r</var></span> の比を確かめます。</span></p>
       </div>
       <div class="save-status" title="0°から360°まで、17の代表角を確認できます">
         <span class="save-dot" aria-hidden="true"></span>
@@ -1271,7 +1277,7 @@
           <div class="section-heading">
             <span class="step-badge">STEP 2</span>
             <div>
-              <h2 id="definitionTitle"><math class="inline-math" aria-label="x、y、r"><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>r</mi></math> の比を確かめる</h2>
+              <h2 id="definitionTitle"><span class="math-expression" aria-label="x、y、r"><var>x</var>, <var>y</var>, <var>r</var></span> の比を確かめる</h2>
               <p><span class="text-chunk">符号に注意して、</span><wbr><span class="text-chunk">最も簡単な比で確かめます。</span></p>
             </div>
           </div>
@@ -1285,20 +1291,20 @@
           </div>
 
           <div class="value-heading">
-            <h3><math class="inline-math" aria-label="x、y、r"><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>r</mi></math> の比</h3>
-            <small><math class="inline-math" aria-label="x 対 y 対 r"><mi>x</mi><mo>:</mo><mi>y</mi><mo>:</mo><mi>r</mi></math></small>
+            <h3><span class="math-expression" aria-label="x、y、r"><var>x</var>, <var>y</var>, <var>r</var></span> の比</h3>
+            <small><span class="math-expression" aria-label="x 対 y 対 r"><var>x</var> : <var>y</var> : <var>r</var></span></small>
           </div>
           <div class="coordinate-grid">
             <div class="coordinate-card">
-              <span class="symbol"><math class="inline-math" aria-label="x"><mi>x</mi></math></span>
+              <span class="symbol"><var aria-label="x">x</var></span>
               <strong id="xValue">√3</strong>
             </div>
             <div class="coordinate-card">
-              <span class="symbol"><math class="inline-math" aria-label="y"><mi>y</mi></math></span>
+              <span class="symbol"><var aria-label="y">y</var></span>
               <strong id="yValue">1</strong>
             </div>
             <div class="coordinate-card">
-              <span class="symbol"><math class="inline-math" aria-label="r"><mi>r</mi></math></span>
+              <span class="symbol"><var aria-label="r">r</var></span>
               <strong id="rValue">2</strong>
             </div>
           </div>
