@@ -1,0 +1,1940 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0d6872">
+  <meta name="description" content="円上の点Pを動かし、三角関数の定義からsin・cos・tanの表を完成させる学習教材です。">
+  <title>三角関数ラボ｜円を動かして学ぼう</title>
+  <style>
+    :root {
+      --navy: #14243a;
+      --ink: #22344d;
+      --muted: #607189;
+      --teal-900: #075a63;
+      --teal-700: #087681;
+      --teal-600: #0b8991;
+      --teal-100: #dff5f3;
+      --teal-50: #eefaf8;
+      --orange: #ef7a43;
+      --orange-100: #fff0e8;
+      --blue: #3777d6;
+      --blue-100: #eaf2ff;
+      --yellow: #f2b84b;
+      --yellow-100: #fff7d9;
+      --green: #198754;
+      --green-100: #e8f7ef;
+      --red: #cb3a4e;
+      --red-100: #fdecef;
+      --line: #d9e3ee;
+      --panel: #ffffff;
+      --page: #f4f7fb;
+      --shadow: 0 16px 42px rgba(24, 47, 78, .09);
+      --radius-lg: 26px;
+      --radius-md: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      background:
+        radial-gradient(circle at 8% 0%, rgba(11, 137, 145, .09), transparent 28rem),
+        radial-gradient(circle at 94% 12%, rgba(239, 122, 67, .08), transparent 24rem),
+        var(--page);
+      color: var(--ink);
+      font-family: "Hiragino Sans", "Yu Gothic UI", "Yu Gothic", "Noto Sans JP", sans-serif;
+      line-height: 1.65;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    [tabindex]:focus-visible {
+      outline: 4px solid rgba(55, 119, 214, .25);
+      outline-offset: 3px;
+    }
+
+    .site-header {
+      padding: calc(24px + env(safe-area-inset-top)) 20px 20px;
+    }
+
+    .header-inner,
+    .page-shell {
+      width: min(1180px, 100%);
+      margin-inline: auto;
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      color: white;
+      background: var(--teal-700);
+      box-shadow: 0 8px 20px rgba(8, 118, 129, .22);
+    }
+
+    .brand-mark svg {
+      width: 27px;
+      height: 27px;
+    }
+
+    .eyebrow {
+      margin: 0;
+      color: var(--teal-700);
+      font-size: .78rem;
+      font-weight: 900;
+      letter-spacing: .14em;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(1.7rem, 5vw, 2.85rem);
+      line-height: 1.22;
+      letter-spacing: -.04em;
+    }
+
+    .header-copy {
+      margin: 9px 0 0;
+      color: var(--muted);
+      font-size: .98rem;
+    }
+
+    .save-status {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 13px;
+      border: 1px solid #cce9e5;
+      border-radius: 999px;
+      color: var(--teal-900);
+      background: rgba(238, 250, 248, .82);
+      font-size: .78rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .save-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #21a36b;
+      box-shadow: 0 0 0 4px rgba(33, 163, 107, .12);
+    }
+
+    .page-shell {
+      padding: 4px 20px calc(56px + env(safe-area-inset-bottom));
+    }
+
+    .learning-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(340px, .92fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .panel {
+      border: 1px solid rgba(207, 220, 234, .9);
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, .95);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel-pad {
+      padding: clamp(18px, 3vw, 28px);
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .step-badge {
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      min-width: 62px;
+      height: 30px;
+      margin-top: 2px;
+      border-radius: 999px;
+      color: var(--teal-900);
+      background: var(--teal-100);
+      font-size: .74rem;
+      font-weight: 900;
+      letter-spacing: .08em;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      color: var(--navy);
+      font-size: clamp(1.12rem, 3vw, 1.42rem);
+      line-height: 1.4;
+    }
+
+    .section-heading p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: .86rem;
+    }
+
+    .circle-stage {
+      position: relative;
+      display: grid;
+      place-items: center;
+      aspect-ratio: 1 / 1;
+      width: min(100%, 560px);
+      margin-inline: auto;
+      border: 1px solid #dce8f1;
+      border-radius: 22px;
+      background:
+        linear-gradient(rgba(255,255,255,.82), rgba(255,255,255,.82)),
+        linear-gradient(90deg, rgba(8,118,129,.06) 1px, transparent 1px),
+        linear-gradient(rgba(8,118,129,.06) 1px, transparent 1px);
+      background-size: auto, 24px 24px, 24px 24px;
+      overflow: hidden;
+      touch-action: none;
+      user-select: none;
+    }
+
+    #circleSvg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .axis {
+      stroke: #8ea0b5;
+      stroke-width: 2;
+    }
+
+    .axis-arrow {
+      fill: #8ea0b5;
+    }
+
+    .axis-label {
+      fill: #53657b;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .unit-circle {
+      fill: rgba(223, 245, 243, .32);
+      stroke: var(--teal-600);
+      stroke-width: 4;
+    }
+
+    .angle-arc {
+      fill: none;
+      stroke: var(--orange);
+      stroke-linecap: round;
+      stroke-width: 6;
+    }
+
+    .angle-label {
+      fill: #c35427;
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .triangle-fill {
+      fill: rgba(55, 119, 214, .12);
+    }
+
+    .triangle-side {
+      fill: none;
+      stroke: var(--blue);
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 4;
+    }
+
+    .radius-side {
+      stroke: var(--orange);
+    }
+
+    .right-angle {
+      fill: none;
+      stroke: var(--blue);
+      stroke-width: 3;
+    }
+
+    .point-guide {
+      stroke: #8bbad1;
+      stroke-width: 2;
+      stroke-dasharray: 7 7;
+    }
+
+    .origin-point {
+      fill: var(--navy);
+    }
+
+    .point-halo {
+      fill: rgba(239, 122, 67, .16);
+      animation: breathe 2s ease-in-out infinite;
+    }
+
+    .point-main {
+      fill: var(--orange);
+      stroke: white;
+      stroke-width: 5;
+      filter: drop-shadow(0 5px 8px rgba(155, 70, 31, .28));
+      cursor: grab;
+    }
+
+    .point-main:active {
+      cursor: grabbing;
+    }
+
+    .point-label {
+      fill: var(--navy);
+      font-size: 18px;
+      font-weight: 900;
+      paint-order: stroke;
+      stroke: white;
+      stroke-width: 5px;
+      stroke-linejoin: round;
+    }
+
+    .ratio-badge circle {
+      fill: white;
+      stroke-width: 3;
+      filter: drop-shadow(0 3px 5px rgba(24, 47, 78, .13));
+    }
+
+    .ratio-badge text {
+      font-size: 16px;
+      font-weight: 900;
+      text-anchor: middle;
+      dominant-baseline: central;
+    }
+
+    .ratio-badge.horizontal circle,
+    .ratio-badge.vertical circle {
+      stroke: var(--blue);
+    }
+
+    .ratio-badge.horizontal text,
+    .ratio-badge.vertical text {
+      fill: #285da9;
+    }
+
+    .ratio-badge.radius circle {
+      stroke: var(--orange);
+    }
+
+    .ratio-badge.radius text {
+      fill: #c35427;
+    }
+
+    .axis-note {
+      position: absolute;
+      left: 50%;
+      bottom: 16px;
+      translate: -50% 0;
+      width: max-content;
+      max-width: calc(100% - 24px);
+      padding: 8px 12px;
+      border: 1px solid #f1dda1;
+      border-radius: 12px;
+      color: #6c5216;
+      background: rgba(255, 248, 218, .95);
+      box-shadow: 0 6px 18px rgba(87, 68, 18, .08);
+      font-size: .76rem;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .drag-hint {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: .8rem;
+      font-weight: 700;
+    }
+
+    .drag-hint svg {
+      width: 18px;
+      height: 18px;
+      color: var(--teal-700);
+    }
+
+    .angle-selector {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+      padding: 3px 1px 7px;
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
+      scrollbar-color: #aac9cf transparent;
+      scroll-snap-type: x proximity;
+    }
+
+    .angle-chip {
+      flex: 0 0 auto;
+      min-width: 56px;
+      min-height: 44px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      color: #40546d;
+      background: #f9fbfd;
+      font-weight: 900;
+      cursor: pointer;
+      scroll-snap-align: start;
+      transition: transform .16s ease, color .16s ease, background .16s ease, border-color .16s ease;
+    }
+
+    .angle-chip:hover {
+      border-color: #93c8c8;
+      transform: translateY(-1px);
+    }
+
+    .angle-chip.active {
+      border-color: var(--teal-700);
+      color: white;
+      background: var(--teal-700);
+      box-shadow: 0 6px 14px rgba(8, 118, 129, .2);
+    }
+
+    .current-angle-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 17px 18px;
+      border: 1px solid #cce8e5;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #effbf9, #f8fdfd);
+    }
+
+    .current-angle-card span {
+      color: var(--teal-900);
+      font-size: .78rem;
+      font-weight: 900;
+      letter-spacing: .08em;
+    }
+
+    .current-angle-card strong {
+      color: var(--teal-900);
+      font-size: clamp(2rem, 7vw, 3.15rem);
+      line-height: 1;
+      letter-spacing: -.04em;
+    }
+
+    .value-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 20px 0 10px;
+    }
+
+    .value-heading h3,
+    .definition-block h3,
+    .practice-block h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 1rem;
+    }
+
+    .value-heading small {
+      color: var(--muted);
+      font-size: .75rem;
+      font-weight: 700;
+    }
+
+    .coordinate-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .coordinate-card {
+      min-width: 0;
+      padding: 13px 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: #fbfcfe;
+      text-align: center;
+    }
+
+    .coordinate-card .symbol {
+      display: inline-grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      margin-bottom: 7px;
+      border-radius: 9px;
+      color: white;
+      background: var(--blue);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1rem;
+      font-style: italic;
+      font-weight: 800;
+    }
+
+    .coordinate-card:nth-child(2) .symbol {
+      background: var(--teal-700);
+    }
+
+    .coordinate-card:nth-child(3) .symbol {
+      background: var(--orange);
+    }
+
+    .coordinate-card strong {
+      display: block;
+      min-height: 1.65em;
+      color: var(--navy);
+      font-family: "Hiragino Sans", "Yu Gothic UI", sans-serif;
+      font-size: clamp(.82rem, 2.4vw, 1rem);
+      line-height: 1.4;
+      overflow-wrap: anywhere;
+    }
+
+    .definition-block {
+      margin-top: 20px;
+    }
+
+    .definition-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .definition-row {
+      display: grid;
+      grid-template-columns: 64px 1fr auto;
+      align-items: center;
+      gap: 10px;
+      min-height: 52px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fbfcfe;
+    }
+
+    .definition-row .function-name {
+      color: var(--navy);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+    }
+
+    .definition-row .formula {
+      color: #43566e;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.03rem;
+      font-weight: 700;
+    }
+
+    .definition-row .substitution {
+      color: var(--teal-900);
+      font-size: .78rem;
+      font-weight: 900;
+      text-align: right;
+    }
+
+    .practice-block {
+      margin-top: 21px;
+      padding-top: 20px;
+      border-top: 1px dashed #cbd9e7;
+    }
+
+    .practice-lead {
+      margin: 4px 0 12px;
+      color: var(--muted);
+      font-size: .8rem;
+    }
+
+    .current-inputs {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 9px;
+    }
+
+    .answer-field {
+      position: relative;
+      min-width: 0;
+    }
+
+    .answer-field label {
+      display: block;
+      margin: 0 0 5px 2px;
+      color: #43566e;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: .8rem;
+      font-weight: 800;
+    }
+
+    .answer-input {
+      width: 100%;
+      min-height: 48px;
+      padding: 10px 32px 10px 10px;
+      border: 2px solid #d8e2ec;
+      border-radius: 13px;
+      color: var(--navy);
+      background: white;
+      font-size: .9rem;
+      font-weight: 800;
+      text-align: center;
+      transition: border-color .15s ease, background .15s ease;
+    }
+
+    .answer-input::placeholder {
+      color: #9aa9ba;
+      font-weight: 600;
+    }
+
+    .answer-input:hover {
+      border-color: #a9c3d9;
+    }
+
+    .answer-field.correct .answer-input,
+    .table-answer.correct {
+      border-color: var(--green);
+      background: var(--green-100);
+    }
+
+    .answer-field.wrong .answer-input,
+    .table-answer.wrong {
+      border-color: var(--red);
+      background: var(--red-100);
+    }
+
+    .answer-mark {
+      position: absolute;
+      right: 9px;
+      bottom: 12px;
+      display: none;
+      font-size: .95rem;
+      font-weight: 900;
+    }
+
+    .answer-field.correct .answer-mark {
+      display: block;
+      color: var(--green);
+    }
+
+    .answer-field.wrong .answer-mark {
+      display: block;
+      color: var(--red);
+    }
+
+    .mini-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 10px 15px;
+      border: 1px solid transparent;
+      border-radius: 13px;
+      font-size: .82rem;
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      color: white;
+      background: var(--teal-700);
+      box-shadow: 0 7px 16px rgba(8, 118, 129, .18);
+    }
+
+    .btn-primary:hover {
+      background: var(--teal-900);
+    }
+
+    .btn-secondary {
+      border-color: var(--line);
+      color: #40546d;
+      background: white;
+    }
+
+    .btn-secondary:hover {
+      background: #f4f8fb;
+    }
+
+    .btn-danger {
+      border-color: #f1c6cd;
+      color: #a82e41;
+      background: #fff8f9;
+    }
+
+    .hint-box {
+      display: none;
+      margin-top: 12px;
+      padding: 11px 13px;
+      border: 1px solid #f0d88f;
+      border-radius: 13px;
+      color: #664e16;
+      background: var(--yellow-100);
+      font-size: .79rem;
+      font-weight: 700;
+    }
+
+    .hint-box.show {
+      display: block;
+      animation: lift-in .22s ease both;
+    }
+
+    .table-panel {
+      margin-top: 20px;
+    }
+
+    .table-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .progress-wrap {
+      flex: 0 0 220px;
+      padding: 11px 13px;
+      border: 1px solid #dce6ef;
+      border-radius: 15px;
+      background: #f9fbfd;
+    }
+
+    .progress-copy {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 7px;
+      color: var(--muted);
+      font-size: .76rem;
+      font-weight: 800;
+    }
+
+    .progress-copy strong {
+      color: var(--teal-900);
+    }
+
+    .progress-track {
+      height: 8px;
+      border-radius: 999px;
+      background: #dfe9ee;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--teal-600), #4ab9a8);
+      transition: width .25s ease;
+    }
+
+    .table-scroll {
+      margin-top: 4px;
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: white;
+      overscroll-behavior-inline: contain;
+    }
+
+    .trig-table {
+      width: 100%;
+      min-width: 650px;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: .88rem;
+    }
+
+    .trig-table th,
+    .trig-table td {
+      padding: 10px;
+      border-right: 1px solid #e2e9f0;
+      border-bottom: 1px solid #e2e9f0;
+      text-align: center;
+    }
+
+    .trig-table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .trig-table th:last-child,
+    .trig-table td:last-child {
+      border-right: 0;
+    }
+
+    .trig-table thead th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      color: white;
+      background: var(--navy);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: .95rem;
+    }
+
+    .trig-table thead th:first-child {
+      width: 90px;
+      font-family: inherit;
+    }
+
+    .trig-table tbody tr {
+      background: white;
+      transition: background .16s ease;
+    }
+
+    .trig-table tbody tr:nth-child(even) {
+      background: #f9fbfd;
+    }
+
+    .trig-table tbody tr.current-row {
+      background: #eefaf8;
+      box-shadow: inset 5px 0 0 var(--teal-600);
+    }
+
+    .angle-cell button {
+      min-width: 60px;
+      min-height: 42px;
+      border: 0;
+      border-radius: 12px;
+      color: var(--teal-900);
+      background: var(--teal-100);
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .current-row .angle-cell button {
+      color: white;
+      background: var(--teal-700);
+    }
+
+    .table-answer {
+      width: min(100%, 165px);
+      min-height: 42px;
+      padding: 8px 10px;
+      border: 2px solid #d9e3ec;
+      border-radius: 11px;
+      color: var(--navy);
+      background: white;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .table-tools {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .table-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .check-message {
+      min-height: 1.5em;
+      margin: 0;
+      color: var(--muted);
+      font-size: .84rem;
+      font-weight: 800;
+      text-align: right;
+    }
+
+    .check-message.success {
+      color: var(--green);
+    }
+
+    .check-message.notice {
+      color: #9b6511;
+    }
+
+    .legend-panel {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .legend-card {
+      padding: 15px 16px;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: rgba(255, 255, 255, .78);
+    }
+
+    .legend-card strong {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--navy);
+      font-size: .86rem;
+    }
+
+    .legend-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .75rem;
+    }
+
+    .legend-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      margin-right: 6px;
+      border-radius: 50%;
+      vertical-align: 1px;
+    }
+
+    .legend-dot.blue { background: var(--blue); }
+    .legend-dot.orange { background: var(--orange); }
+    .legend-dot.teal { background: var(--teal-700); }
+
+    .site-footer {
+      margin-top: 24px;
+      color: #7a899b;
+      font-size: .72rem;
+      text-align: center;
+    }
+
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); opacity: .75; }
+      50% { transform: scale(1.18); opacity: .35; }
+    }
+
+    @keyframes lift-in {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 880px) {
+      .learning-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .definition-list {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .definition-row {
+        grid-template-columns: 1fr;
+        gap: 2px;
+        text-align: center;
+      }
+
+      .definition-row .substitution {
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .site-header {
+        padding-inline: 14px;
+      }
+
+      .header-inner {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .brand-row {
+        margin-bottom: 5px;
+      }
+
+      .brand-mark {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+      }
+
+      .header-copy {
+        font-size: .88rem;
+      }
+
+      .save-status {
+        align-self: flex-start;
+      }
+
+      .page-shell {
+        padding-inline: 12px;
+      }
+
+      .panel {
+        border-radius: 21px;
+      }
+
+      .panel-pad {
+        padding: 17px;
+      }
+
+      .section-heading {
+        gap: 9px;
+      }
+
+      .step-badge {
+        min-width: 53px;
+        height: 27px;
+        font-size: .67rem;
+      }
+
+      .circle-stage {
+        border-radius: 17px;
+      }
+
+      .drag-hint {
+        font-size: .73rem;
+      }
+
+      .current-angle-card {
+        padding: 14px 15px;
+      }
+
+      .coordinate-card {
+        padding-inline: 5px;
+      }
+
+      .definition-list {
+        grid-template-columns: 1fr;
+      }
+
+      .definition-row {
+        grid-template-columns: 54px 1fr auto;
+        text-align: left;
+      }
+
+      .definition-row .substitution {
+        text-align: right;
+      }
+
+      .current-inputs {
+        gap: 6px;
+      }
+
+      .answer-input {
+        padding-inline: 6px 26px;
+        font-size: .78rem;
+      }
+
+      .answer-mark {
+        right: 6px;
+      }
+
+      .table-head,
+      .table-tools {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .progress-wrap {
+        flex-basis: auto;
+      }
+
+      .table-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .table-actions .btn-primary {
+        grid-column: 1 / -1;
+      }
+
+      .check-message {
+        text-align: left;
+      }
+
+      .legend-panel {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .legend-card {
+        padding: 12px 14px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      .site-header,
+      .circle-panel,
+      .definition-panel,
+      .table-tools,
+      .legend-panel,
+      .site-footer {
+        display: none !important;
+      }
+
+      .page-shell {
+        padding: 0;
+      }
+
+      .table-panel {
+        margin: 0;
+        border: 0;
+        box-shadow: none;
+      }
+
+      .table-scroll {
+        overflow: visible;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <div>
+        <div class="brand-row">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none">
+              <circle cx="16" cy="16" r="11" stroke="currentColor" stroke-width="2"/>
+              <path d="M16 16L25.4 10.2M16 16H25.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="25.4" cy="10.2" r="2.7" fill="currentColor"/>
+            </svg>
+          </span>
+          <p class="eyebrow">TRIGONOMETRY LAB</p>
+        </div>
+        <h1>円を動かして、三角関数をつかもう。</h1>
+        <p class="header-copy">点Pを動かし、定義から考えて、最後に表を完成させます。</p>
+      </div>
+      <div class="save-status" title="入力内容はこの端末に自動保存されます">
+        <span class="save-dot" aria-hidden="true"></span>
+        入力を自動保存
+      </div>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <div class="learning-grid">
+      <section class="panel circle-panel" aria-labelledby="circleTitle">
+        <div class="panel-pad">
+          <div class="section-heading">
+            <span class="step-badge">STEP 1</span>
+            <div>
+              <h2 id="circleTitle">点Pを円周上で動かす</h2>
+              <p>オレンジの点をドラッグ、または角度ボタンを押します。</p>
+            </div>
+          </div>
+
+          <div class="circle-stage" id="circleStage">
+            <svg id="circleSvg" viewBox="0 0 500 500" role="img" aria-labelledby="svgTitle svgDesc">
+              <title id="svgTitle">半径rの円と円周上の点P</title>
+              <desc id="svgDesc">点Pは指定された角度へ動かせます。直角三角形が作れるときは辺の比も表示します。</desc>
+              <defs>
+                <marker id="axisArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                  <path class="axis-arrow" d="M 0 0 L 10 5 L 0 10 z"></path>
+                </marker>
+              </defs>
+              <line class="axis" x1="34" y1="250" x2="466" y2="250" marker-start="url(#axisArrow)" marker-end="url(#axisArrow)"></line>
+              <line class="axis" x1="250" y1="466" x2="250" y2="34" marker-start="url(#axisArrow)" marker-end="url(#axisArrow)"></line>
+              <text class="axis-label" x="470" y="242">x</text>
+              <text class="axis-label" x="260" y="37">y</text>
+              <text class="axis-label" x="235" y="272">O</text>
+
+              <circle id="unitCircle" class="unit-circle" cx="250" cy="250" r="180"></circle>
+              <path id="triangleFill" class="triangle-fill"></path>
+              <line id="horizontalSide" class="triangle-side"></line>
+              <line id="verticalSide" class="triangle-side"></line>
+              <line id="radiusSide" class="triangle-side radius-side"></line>
+              <path id="rightAngle" class="right-angle"></path>
+              <line id="pointGuide" class="point-guide"></line>
+              <path id="angleArc" class="angle-arc"></path>
+              <text id="angleArcLabel" class="angle-label"></text>
+              <circle class="origin-point" cx="250" cy="250" r="5"></circle>
+
+              <g id="horizontalBadge" class="ratio-badge horizontal">
+                <circle r="20"></circle>
+                <text></text>
+              </g>
+              <g id="verticalBadge" class="ratio-badge vertical">
+                <circle r="20"></circle>
+                <text></text>
+              </g>
+              <g id="radiusBadge" class="ratio-badge radius">
+                <circle r="20"></circle>
+                <text></text>
+              </g>
+
+              <g id="pointGroup" tabindex="0" role="slider" aria-label="円周上の点P" aria-valuemin="0" aria-valuemax="360" aria-valuenow="30" aria-valuetext="30度。左右の矢印キーでも動かせます。">
+                <circle id="pointHalo" class="point-halo" r="27"></circle>
+                <circle id="pointP" class="point-main" r="13"></circle>
+                <text id="pointLabel" class="point-label">P</text>
+              </g>
+            </svg>
+            <div id="axisNote" class="axis-note" hidden>軸上では直角三角形を作れません</div>
+          </div>
+
+          <p class="drag-hint">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M8 11V7a2 2 0 114 0v3-1a2 2 0 114 0v2-1a2 2 0 114 0v5c0 3.3-2.7 6-6 6h-1.1a6 6 0 01-4.8-2.4L2.4 16a2 2 0 013.1-2.5L8 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            点Pは指定された角度にぴたっと止まります
+          </p>
+          <div id="angleSelector" class="angle-selector" aria-label="角度を選ぶ"></div>
+        </div>
+      </section>
+
+      <section class="panel definition-panel" aria-labelledby="definitionTitle">
+        <div class="panel-pad">
+          <div class="section-heading">
+            <span class="step-badge">STEP 2</span>
+            <div>
+              <h2 id="definitionTitle">定義に当てはめて考える</h2>
+              <p>辺の向きに注意して、符号まで考えましょう。</p>
+            </div>
+          </div>
+
+          <div class="current-angle-card">
+            <div>
+              <span>いまの角度</span>
+              <div style="color:#607189;font-size:.75rem;font-weight:700;">∠XOP</div>
+            </div>
+            <strong id="currentAngle">30°</strong>
+          </div>
+
+          <div class="value-heading">
+            <h3>点Pの座標と半径</h3>
+            <small>P（x, y）</small>
+          </div>
+          <div class="coordinate-grid">
+            <div class="coordinate-card">
+              <span class="symbol">x</span>
+              <strong id="xValue">√3r / 2</strong>
+            </div>
+            <div class="coordinate-card">
+              <span class="symbol">y</span>
+              <strong id="yValue">r / 2</strong>
+            </div>
+            <div class="coordinate-card">
+              <span class="symbol">r</span>
+              <strong id="rValue">r</strong>
+            </div>
+          </div>
+
+          <div class="definition-block">
+            <h3>三角関数の定義</h3>
+            <div class="definition-list">
+              <div class="definition-row">
+                <span class="function-name">sin θ</span>
+                <span class="formula">= y / r</span>
+                <span id="sinSub" class="substitution">（r/2）÷ r</span>
+              </div>
+              <div class="definition-row">
+                <span class="function-name">cos θ</span>
+                <span class="formula">= x / r</span>
+                <span id="cosSub" class="substitution">（√3r/2）÷ r</span>
+              </div>
+              <div class="definition-row">
+                <span class="function-name">tan θ</span>
+                <span class="formula">= y / x</span>
+                <span id="tanSub" class="substitution">（r/2）÷（√3r/2）</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="practice-block">
+            <h3><span id="practiceAngle">30°</span> の値を入力</h3>
+            <p class="practice-lead">例：√3/2、-1、定義なし</p>
+            <div id="currentInputs" class="current-inputs"></div>
+            <div class="mini-actions">
+              <button id="checkCurrentBtn" class="btn btn-primary" type="button">この角度を判定</button>
+              <button id="hintBtn" class="btn btn-secondary" type="button">ヒント</button>
+              <button id="revealBtn" class="btn btn-secondary" type="button">この行の答え</button>
+            </div>
+            <div id="hintBox" class="hint-box" role="status"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="panel table-panel" aria-labelledby="tableTitle">
+      <div class="panel-pad">
+        <div class="table-head">
+          <div class="section-heading">
+            <span class="step-badge">STEP 3</span>
+            <div>
+              <h2 id="tableTitle">三角関数の表を完成させる</h2>
+              <p>空欄を埋めて、答え合わせをしましょう。角度を押すと円も動きます。</p>
+            </div>
+          </div>
+          <div class="progress-wrap" aria-label="入力の進み具合">
+            <div class="progress-copy">
+              <span>入力済み</span>
+              <strong id="progressText">0 / 51</strong>
+            </div>
+            <div class="progress-track">
+              <div id="progressBar" class="progress-bar"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-scroll">
+          <table class="trig-table">
+            <thead>
+              <tr>
+                <th scope="col">θ</th>
+                <th scope="col">sin θ = y / r</th>
+                <th scope="col">cos θ = x / r</th>
+                <th scope="col">tan θ = y / x</th>
+              </tr>
+            </thead>
+            <tbody id="trigTableBody"></tbody>
+          </table>
+        </div>
+
+        <div class="table-tools">
+          <div class="table-actions">
+            <button id="checkAllBtn" class="btn btn-primary" type="button">すべて答え合わせ</button>
+            <button id="printBtn" class="btn btn-secondary" type="button">表を印刷</button>
+            <button id="resetBtn" class="btn btn-danger" type="button">すべて消す</button>
+          </div>
+          <p id="checkMessage" class="check-message" aria-live="polite">正確な値で入力しましょう。</p>
+        </div>
+      </div>
+    </section>
+
+    <aside class="legend-panel" aria-label="図の見方">
+      <div class="legend-card">
+        <strong><span class="legend-dot blue"></span>青い辺</strong>
+        <p>横・縦の長さです。長さなので負の値にはなりません。</p>
+      </div>
+      <div class="legend-card">
+        <strong><span class="legend-dot orange"></span>オレンジの辺</strong>
+        <p>半径rです。丸の中は直角三角形の辺の比を表します。</p>
+      </div>
+      <div class="legend-card">
+        <strong><span class="legend-dot teal"></span>x・yの値</strong>
+        <p>座標なので、点Pがある象限によって正負が変わります。</p>
+      </div>
+    </aside>
+
+    <footer class="site-footer">
+      三角関数ラボ — 円と座標から、定義を目で確かめる教材
+    </footer>
+  </main>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const ANGLES = [0, 30, 45, 60, 90, 120, 135, 150, 180, 210, 225, 240, 270, 300, 315, 330, 360];
+      const FUNCTIONS = ["sin", "cos", "tan"];
+      const STORAGE_KEY = "trig-circle-lab-answers-v1";
+      const SVG_NS = "http://www.w3.org/2000/svg";
+      const CENTER = 250;
+      const RADIUS = 180;
+
+      const DATA = {
+        0:   { x: "r",         y: "0",          sin: "0",       cos: "1",        tan: "0" },
+        30:  { x: "√3r / 2",   y: "r / 2",      sin: "1/2",     cos: "√3/2",     tan: "√3/3" },
+        45:  { x: "√2r / 2",   y: "√2r / 2",    sin: "√2/2",    cos: "√2/2",     tan: "1" },
+        60:  { x: "r / 2",     y: "√3r / 2",    sin: "√3/2",    cos: "1/2",      tan: "√3" },
+        90:  { x: "0",         y: "r",          sin: "1",       cos: "0",        tan: "定義なし" },
+        120: { x: "−r / 2",    y: "√3r / 2",    sin: "√3/2",    cos: "−1/2",     tan: "−√3" },
+        135: { x: "−√2r / 2",  y: "√2r / 2",    sin: "√2/2",    cos: "−√2/2",    tan: "−1" },
+        150: { x: "−√3r / 2",  y: "r / 2",      sin: "1/2",     cos: "−√3/2",    tan: "−√3/3" },
+        180: { x: "−r",        y: "0",          sin: "0",       cos: "−1",       tan: "0" },
+        210: { x: "−√3r / 2",  y: "−r / 2",     sin: "−1/2",    cos: "−√3/2",    tan: "√3/3" },
+        225: { x: "−√2r / 2",  y: "−√2r / 2",   sin: "−√2/2",   cos: "−√2/2",    tan: "1" },
+        240: { x: "−r / 2",    y: "−√3r / 2",   sin: "−√3/2",   cos: "−1/2",     tan: "√3" },
+        270: { x: "0",         y: "−r",         sin: "−1",      cos: "0",        tan: "定義なし" },
+        300: { x: "r / 2",     y: "−√3r / 2",   sin: "−√3/2",   cos: "1/2",      tan: "−√3" },
+        315: { x: "√2r / 2",   y: "−√2r / 2",   sin: "−√2/2",   cos: "√2/2",     tan: "−1" },
+        330: { x: "√3r / 2",   y: "−r / 2",     sin: "−1/2",    cos: "√3/2",     tan: "−√3/3" },
+        360: { x: "r",         y: "0",          sin: "0",       cos: "1",        tan: "0" }
+      };
+
+      let currentAngle = 30;
+      let answers = loadAnswers();
+      let checked = {};
+      let dragging = false;
+
+      const el = {
+        angleSelector: document.getElementById("angleSelector"),
+        currentAngle: document.getElementById("currentAngle"),
+        practiceAngle: document.getElementById("practiceAngle"),
+        xValue: document.getElementById("xValue"),
+        yValue: document.getElementById("yValue"),
+        sinSub: document.getElementById("sinSub"),
+        cosSub: document.getElementById("cosSub"),
+        tanSub: document.getElementById("tanSub"),
+        currentInputs: document.getElementById("currentInputs"),
+        tableBody: document.getElementById("trigTableBody"),
+        progressText: document.getElementById("progressText"),
+        progressBar: document.getElementById("progressBar"),
+        checkMessage: document.getElementById("checkMessage"),
+        hintBox: document.getElementById("hintBox"),
+        axisNote: document.getElementById("axisNote"),
+        circleSvg: document.getElementById("circleSvg"),
+        unitCircle: document.getElementById("unitCircle"),
+        pointGroup: document.getElementById("pointGroup"),
+        pointP: document.getElementById("pointP"),
+        pointHalo: document.getElementById("pointHalo"),
+        pointLabel: document.getElementById("pointLabel"),
+        triangleFill: document.getElementById("triangleFill"),
+        horizontalSide: document.getElementById("horizontalSide"),
+        verticalSide: document.getElementById("verticalSide"),
+        radiusSide: document.getElementById("radiusSide"),
+        rightAngle: document.getElementById("rightAngle"),
+        pointGuide: document.getElementById("pointGuide"),
+        angleArc: document.getElementById("angleArc"),
+        angleArcLabel: document.getElementById("angleArcLabel"),
+        horizontalBadge: document.getElementById("horizontalBadge"),
+        verticalBadge: document.getElementById("verticalBadge"),
+        radiusBadge: document.getElementById("radiusBadge")
+      };
+
+      function loadAnswers() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+          return saved && typeof saved === "object" ? saved : {};
+        } catch {
+          return {};
+        }
+      }
+
+      function saveAnswers() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(answers));
+        } catch {
+          // The exercise still works if browser storage is unavailable.
+        }
+      }
+
+      function key(angle, fn) {
+        return `${angle}-${fn}`;
+      }
+
+      function displayCompact(value) {
+        return value.replaceAll(" ", "");
+      }
+
+      function normalize(value) {
+        let text = String(value ?? "")
+          .trim()
+          .toLowerCase()
+          .replace(/[ 　]/g, "")
+          .replace(/[−–—]/g, "-")
+          .replace(/[／÷]/g, "/")
+          .replace(/[（]/g, "(")
+          .replace(/[）]/g, ")")
+          .replace(/sqrt\s*\(\s*([23])\s*\)/g, "√$1")
+          .replace(/sqrt([23])/g, "√$1")
+          .replace(/√\(([23])\)/g, "√$1")
+          .replace(/^\+/, "");
+
+        if (["undefined", "undef", "なし", "定義されない", "×", "x"].includes(text)) {
+          text = "定義なし";
+        }
+        return text;
+      }
+
+      function acceptedValues(answer) {
+        const canonical = normalize(answer);
+        const values = new Set([canonical]);
+        const negative = canonical.startsWith("-");
+        const unsigned = negative ? canonical.slice(1) : canonical;
+        const prefix = negative ? "-" : "";
+
+        if (unsigned === "√3/3") {
+          values.add(`${prefix}1/√3`);
+          values.add(`${prefix}√3/√9`);
+        }
+        if (unsigned === "√2/2") {
+          values.add(`${prefix}1/√2`);
+        }
+        return values;
+      }
+
+      function isCorrect(angle, fn, value) {
+        return acceptedValues(DATA[angle][fn]).has(normalize(value));
+      }
+
+      function ratioFor(angle) {
+        const normalized = ((angle % 360) + 360) % 360;
+        const cosAbs = Math.abs(Math.cos(normalized * Math.PI / 180));
+        const sinAbs = Math.abs(Math.sin(normalized * Math.PI / 180));
+        if (cosAbs < .001 || sinAbs < .001) return null;
+        if (Math.abs(cosAbs - sinAbs) < .001) return { x: "1", y: "1", r: "√2" };
+        if (cosAbs > sinAbs) return { x: "√3", y: "1", r: "2" };
+        return { x: "1", y: "√3", r: "2" };
+      }
+
+      function renderAngleSelector() {
+        el.angleSelector.innerHTML = "";
+        ANGLES.forEach(angle => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = `angle-chip${angle === currentAngle ? " active" : ""}`;
+          button.textContent = `${angle}°`;
+          button.setAttribute("aria-pressed", String(angle === currentAngle));
+          button.addEventListener("click", () => setAngle(angle, true));
+          el.angleSelector.appendChild(button);
+        });
+      }
+
+      function renderTable() {
+        el.tableBody.innerHTML = "";
+        ANGLES.forEach(angle => {
+          const tr = document.createElement("tr");
+          tr.dataset.angle = angle;
+          if (angle === currentAngle) tr.classList.add("current-row");
+
+          const angleTd = document.createElement("td");
+          angleTd.className = "angle-cell";
+          const angleButton = document.createElement("button");
+          angleButton.type = "button";
+          angleButton.textContent = `${angle}°`;
+          angleButton.setAttribute("aria-label", `${angle}度を図に表示`);
+          angleButton.addEventListener("click", () => {
+            setAngle(angle, true);
+            document.querySelector(".learning-grid").scrollIntoView({ behavior: "smooth", block: "start" });
+          });
+          angleTd.appendChild(angleButton);
+          tr.appendChild(angleTd);
+
+          FUNCTIONS.forEach(fn => {
+            const td = document.createElement("td");
+            const input = document.createElement("input");
+            const answerKey = key(angle, fn);
+            input.className = "table-answer";
+            input.type = "text";
+            input.value = answers[answerKey] || "";
+            input.placeholder = fn === "tan" && (angle === 90 || angle === 270) ? "定義なし" : "入力";
+            input.autocomplete = "off";
+            input.spellcheck = false;
+            input.setAttribute("aria-label", `${angle}度の${fn}の値`);
+            applyCheckClass(input, checked[answerKey]);
+            input.addEventListener("input", event => updateAnswer(angle, fn, event.target.value, "table"));
+            td.appendChild(input);
+            tr.appendChild(td);
+          });
+          el.tableBody.appendChild(tr);
+        });
+      }
+
+      function renderCurrentInputs() {
+        el.currentInputs.innerHTML = "";
+        FUNCTIONS.forEach(fn => {
+          const wrapper = document.createElement("div");
+          const answerKey = key(currentAngle, fn);
+          wrapper.className = "answer-field";
+          applyCheckClass(wrapper, checked[answerKey]);
+
+          const label = document.createElement("label");
+          const inputId = `current-${fn}`;
+          label.htmlFor = inputId;
+          label.textContent = `${fn} θ`;
+
+          const input = document.createElement("input");
+          input.id = inputId;
+          input.className = "answer-input";
+          input.type = "text";
+          input.value = answers[answerKey] || "";
+          input.placeholder = "?";
+          input.autocomplete = "off";
+          input.spellcheck = false;
+          input.addEventListener("input", event => updateAnswer(currentAngle, fn, event.target.value, "current"));
+
+          const mark = document.createElement("span");
+          mark.className = "answer-mark";
+          mark.textContent = checked[answerKey] === true ? "✓" : "!";
+          mark.setAttribute("aria-hidden", "true");
+
+          wrapper.append(label, input, mark);
+          el.currentInputs.appendChild(wrapper);
+        });
+      }
+
+      function applyCheckClass(element, state) {
+        element.classList.remove("correct", "wrong");
+        if (state === true) element.classList.add("correct");
+        if (state === false) element.classList.add("wrong");
+      }
+
+      function updateAnswer(angle, fn, value, source) {
+        const answerKey = key(angle, fn);
+        answers[answerKey] = value;
+        delete checked[answerKey];
+        saveAnswers();
+        updateProgress();
+
+        if (source === "table" && angle === currentAngle) {
+          const currentInput = document.getElementById(`current-${fn}`);
+          if (currentInput && currentInput.value !== value) currentInput.value = value;
+          const wrapper = currentInput?.closest(".answer-field");
+          if (wrapper) applyCheckClass(wrapper, undefined);
+        }
+
+        if (source === "current") {
+          const row = el.tableBody.querySelector(`tr[data-angle="${angle}"]`);
+          const tableInput = row?.querySelectorAll(".table-answer")[FUNCTIONS.indexOf(fn)];
+          if (tableInput && tableInput.value !== value) tableInput.value = value;
+          if (tableInput) applyCheckClass(tableInput, undefined);
+        }
+      }
+
+      function updateProgress() {
+        const total = ANGLES.length * FUNCTIONS.length;
+        const count = ANGLES.reduce((sum, angle) => (
+          sum + FUNCTIONS.filter(fn => normalize(answers[key(angle, fn)] || "") !== "").length
+        ), 0);
+        el.progressText.textContent = `${count} / ${total}`;
+        el.progressBar.style.width = `${count / total * 100}%`;
+      }
+
+      function substitution(value) {
+        if (value === "0" || value === "r" || value === "−r") return value;
+        return displayCompact(value);
+      }
+
+      function updateDefinition() {
+        const data = DATA[currentAngle];
+        el.currentAngle.textContent = `${currentAngle}°`;
+        el.practiceAngle.textContent = `${currentAngle}°`;
+        el.xValue.textContent = data.x;
+        el.yValue.textContent = data.y;
+
+        el.sinSub.textContent = `（${substitution(data.y)}）÷ r`;
+        el.cosSub.textContent = `（${substitution(data.x)}）÷ r`;
+        el.tanSub.textContent = data.x === "0"
+          ? "x = 0 のため定義なし"
+          : `（${substitution(data.y)}）÷（${substitution(data.x)}）`;
+      }
+
+      function setSvgPoint(element, x, y) {
+        element.setAttribute("cx", x);
+        element.setAttribute("cy", y);
+      }
+
+      function setLine(element, x1, y1, x2, y2) {
+        element.setAttribute("x1", x1);
+        element.setAttribute("y1", y1);
+        element.setAttribute("x2", x2);
+        element.setAttribute("y2", y2);
+      }
+
+      function polarPoint(radius, angle) {
+        const rad = angle * Math.PI / 180;
+        return {
+          x: CENTER + radius * Math.cos(rad),
+          y: CENTER - radius * Math.sin(rad)
+        };
+      }
+
+      function arcPath(angle) {
+        const normalized = angle === 360 ? 359.99 : angle;
+        if (normalized === 0) return "";
+        const arcRadius = 49;
+        const start = polarPoint(arcRadius, 0);
+        const end = polarPoint(arcRadius, normalized);
+        const largeArc = normalized > 180 ? 1 : 0;
+        return `M ${start.x} ${start.y} A ${arcRadius} ${arcRadius} 0 ${largeArc} 0 ${end.x} ${end.y}`;
+      }
+
+      function setBadge(group, x, y, value) {
+        group.setAttribute("transform", `translate(${x} ${y})`);
+        group.querySelector("text").textContent = value;
+        const circle = group.querySelector("circle");
+        const badgeRadius = value.includes("√") ? 23 : 20;
+        circle.setAttribute("r", badgeRadius);
+      }
+
+      function updateDiagram() {
+        const visualAngle = currentAngle === 360 ? 0 : currentAngle;
+        const rad = visualAngle * Math.PI / 180;
+        const px = CENTER + RADIUS * Math.cos(rad);
+        const py = CENTER - RADIUS * Math.sin(rad);
+        const footX = px;
+        const footY = CENTER;
+        const ratio = ratioFor(currentAngle);
+        const hasTriangle = ratio !== null;
+
+        setSvgPoint(el.pointP, px, py);
+        setSvgPoint(el.pointHalo, px, py);
+        el.pointGroup.setAttribute("aria-valuenow", currentAngle);
+        el.pointGroup.setAttribute("aria-valuetext", `${currentAngle}度。左右の矢印キーでも動かせます。`);
+        el.pointLabel.setAttribute("x", px + (px >= CENTER ? 17 : -31));
+        el.pointLabel.setAttribute("y", py + (py <= CENTER ? -17 : 29));
+
+        setLine(el.radiusSide, CENTER, CENTER, px, py);
+        setLine(el.pointGuide, px, py, px, CENTER);
+        el.pointGuide.style.display = hasTriangle ? "" : "none";
+
+        el.angleArc.setAttribute("d", arcPath(currentAngle));
+        const arcLabelAngle = currentAngle === 360 ? 330 : Math.max(12, Math.min(currentAngle / 2, 330));
+        const angleLabelPoint = polarPoint(76, arcLabelAngle);
+        el.angleArcLabel.setAttribute("x", angleLabelPoint.x - 10);
+        el.angleArcLabel.setAttribute("y", angleLabelPoint.y + 5);
+        el.angleArcLabel.textContent = currentAngle === 0 ? "0°" : `${currentAngle}°`;
+
+        el.axisNote.hidden = hasTriangle;
+        [el.triangleFill, el.horizontalSide, el.verticalSide, el.rightAngle,
+          el.horizontalBadge, el.verticalBadge, el.radiusBadge].forEach(node => {
+            node.style.display = hasTriangle ? "" : "none";
+          });
+
+        if (!hasTriangle) return;
+
+        el.triangleFill.setAttribute("d", `M ${CENTER} ${CENTER} L ${px} ${CENTER} L ${px} ${py} Z`);
+        setLine(el.horizontalSide, CENTER, CENTER, footX, footY);
+        setLine(el.verticalSide, footX, footY, px, py);
+
+        const sx = Math.sign(CENTER - px) || 1;
+        const sy = Math.sign(py - CENTER) || -1;
+        const square = 19;
+        el.rightAngle.setAttribute(
+          "d",
+          `M ${footX + sx * square} ${footY} L ${footX + sx * square} ${footY + sy * square} L ${footX} ${footY + sy * square}`
+        );
+
+        const horizontalMid = { x: (CENTER + px) / 2, y: CENTER + (py < CENTER ? 25 : -25) };
+        const verticalMid = { x: px + (px > CENTER ? 28 : -28), y: (CENTER + py) / 2 };
+        const radiusMid = {
+          x: (CENTER + px) / 2 + (py < CENTER ? -25 : 25),
+          y: (CENTER + py) / 2 + (px > CENTER ? -20 : 20)
+        };
+
+        setBadge(el.horizontalBadge, horizontalMid.x, horizontalMid.y, ratio.x);
+        setBadge(el.verticalBadge, verticalMid.x, verticalMid.y, ratio.y);
+        setBadge(el.radiusBadge, radiusMid.x, radiusMid.y, ratio.r);
+      }
+
+      function setAngle(angle, scrollChip = false) {
+        currentAngle = angle;
+        el.hintBox.classList.remove("show");
+        renderAngleSelector();
+        renderTable();
+        renderCurrentInputs();
+        updateDefinition();
+        updateDiagram();
+        updateProgress();
+
+        if (scrollChip) {
+          requestAnimationFrame(() => {
+            el.angleSelector.querySelector(".active")?.scrollIntoView({
+              behavior: "smooth",
+              block: "nearest",
+              inline: "center"
+            });
+          });
+        }
+      }
+
+      function nearestAngle(rawAngle) {
+        return ANGLES.reduce((best, angle) => (
+          Math.abs(angle - rawAngle) < Math.abs(best - rawAngle) ? angle : best
+        ), ANGLES[0]);
+      }
+
+      function angleFromPointer(event) {
+        const point = el.circleSvg.createSVGPoint();
+        point.x = event.clientX;
+        point.y = event.clientY;
+        const matrix = el.circleSvg.getScreenCTM();
+        if (!matrix) return currentAngle;
+        const local = point.matrixTransform(matrix.inverse());
+        let degrees = Math.atan2(CENTER - local.y, local.x - CENTER) * 180 / Math.PI;
+        if (degrees < 0) degrees += 360;
+        return nearestAngle(degrees);
+      }
+
+      function beginDrag(event) {
+        dragging = true;
+        el.circleSvg.setPointerCapture?.(event.pointerId);
+        setAngle(angleFromPointer(event));
+        event.preventDefault();
+      }
+
+      function moveDrag(event) {
+        if (!dragging) return;
+        setAngle(angleFromPointer(event));
+        event.preventDefault();
+      }
+
+      function endDrag(event) {
+        dragging = false;
+        if (el.circleSvg.hasPointerCapture?.(event.pointerId)) {
+          el.circleSvg.releasePointerCapture(event.pointerId);
+        }
+      }
+
+      function checkCurrent() {
+        FUNCTIONS.forEach(fn => {
+          const answerKey = key(currentAngle, fn);
+          const value = answers[answerKey] || "";
+          checked[answerKey] = value.trim() !== "" ? isCorrect(currentAngle, fn, value) : false;
+        });
+        renderCurrentInputs();
+        renderTable();
+        const correctCount = FUNCTIONS.filter(fn => checked[key(currentAngle, fn)] === true).length;
+        el.checkMessage.className = `check-message ${correctCount === 3 ? "success" : "notice"}`;
+        el.checkMessage.textContent = correctCount === 3
+          ? `${currentAngle}°は全問正解です！`
+          : `${currentAngle}°は ${correctCount} / 3 問正解です。`;
+      }
+
+      function checkAll() {
+        let correctCount = 0;
+        let filledCount = 0;
+        ANGLES.forEach(angle => {
+          FUNCTIONS.forEach(fn => {
+            const answerKey = key(angle, fn);
+            const value = answers[answerKey] || "";
+            if (value.trim() !== "") {
+              filledCount += 1;
+              checked[answerKey] = isCorrect(angle, fn, value);
+              if (checked[answerKey]) correctCount += 1;
+            } else {
+              delete checked[answerKey];
+            }
+          });
+        });
+        renderCurrentInputs();
+        renderTable();
+        const total = ANGLES.length * FUNCTIONS.length;
+        if (correctCount === total) {
+          el.checkMessage.className = "check-message success";
+          el.checkMessage.textContent = `全${total}問正解です！表が完成しました。`;
+        } else if (filledCount === 0) {
+          el.checkMessage.className = "check-message notice";
+          el.checkMessage.textContent = "まずは値を入力してみましょう。";
+        } else {
+          el.checkMessage.className = "check-message notice";
+          el.checkMessage.textContent = `${filledCount}問中 ${correctCount}問正解です。赤い欄を見直しましょう。`;
+        }
+      }
+
+      function showHint() {
+        const data = DATA[currentAngle];
+        const quadrant =
+          currentAngle === 0 || currentAngle === 90 || currentAngle === 180 ||
+          currentAngle === 270 || currentAngle === 360
+            ? "軸上"
+            : currentAngle < 90 ? "第1象限"
+            : currentAngle < 180 ? "第2象限"
+            : currentAngle < 270 ? "第3象限"
+            : "第4象限";
+        el.hintBox.innerHTML =
+          `<strong>ヒント：</strong>点Pは${quadrant}です。` +
+          `sinは <strong>y ÷ r</strong>、cosは <strong>x ÷ r</strong>、` +
+          `tanは <strong>y ÷ x</strong>。x=${data.x}、y=${data.y} の符号に注目しましょう。`;
+        el.hintBox.classList.toggle("show");
+      }
+
+      function revealCurrent() {
+        FUNCTIONS.forEach(fn => {
+          const answerKey = key(currentAngle, fn);
+          answers[answerKey] = DATA[currentAngle][fn];
+          checked[answerKey] = true;
+        });
+        saveAnswers();
+        renderCurrentInputs();
+        renderTable();
+        updateProgress();
+        el.checkMessage.className = "check-message";
+        el.checkMessage.textContent = `${currentAngle}°の答えを表示しました。`;
+      }
+
+      function resetAll() {
+        if (!window.confirm("入力した答えをすべて消します。よろしいですか？")) return;
+        answers = {};
+        checked = {};
+        saveAnswers();
+        renderCurrentInputs();
+        renderTable();
+        updateProgress();
+        el.checkMessage.className = "check-message";
+        el.checkMessage.textContent = "すべての入力を消しました。";
+      }
+
+      el.circleSvg.addEventListener("pointerdown", beginDrag);
+      el.circleSvg.addEventListener("pointermove", moveDrag);
+      el.circleSvg.addEventListener("pointerup", endDrag);
+      el.circleSvg.addEventListener("pointercancel", endDrag);
+
+      el.pointGroup.addEventListener("keydown", event => {
+        if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) return;
+        event.preventDefault();
+        const index = ANGLES.indexOf(currentAngle);
+        const direction = event.key === "ArrowLeft" || event.key === "ArrowDown" ? -1 : 1;
+        const nextIndex = Math.max(0, Math.min(ANGLES.length - 1, index + direction));
+        setAngle(ANGLES[nextIndex], true);
+      });
+
+      document.getElementById("checkCurrentBtn").addEventListener("click", checkCurrent);
+      document.getElementById("checkAllBtn").addEventListener("click", checkAll);
+      document.getElementById("hintBtn").addEventListener("click", showHint);
+      document.getElementById("revealBtn").addEventListener("click", revealCurrent);
+      document.getElementById("resetBtn").addEventListener("click", resetAll);
+      document.getElementById("printBtn").addEventListener("click", () => window.print());
+
+      setAngle(currentAngle);
+    })();
+  </script>
+</body>
+</html>
