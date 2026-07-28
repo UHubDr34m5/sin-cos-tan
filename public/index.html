@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0d6872">
-  <meta name="description" content="円上の点Pを動かし、角度ごとのx・y・rの比を視覚的に確かめる学習教材です。">
+  <meta name="description" content="円上の点Pを動かし、角度ごとの3つの値と半径の比を視覚的に確かめる学習教材です。">
   <title>三角関数ラボ｜円を動かして学ぼう</title>
   <style>
     :root {
@@ -129,6 +129,22 @@
 
     .text-chunk {
       display: inline-block;
+    }
+
+    .inline-math {
+      display: inline-block;
+      color: inherit;
+      font-family: "STIX Two Math", "Cambria Math", "Times New Roman", serif;
+      font-size: 1.04em;
+      font-weight: inherit;
+      line-height: 1;
+      vertical-align: -.06em;
+      white-space: nowrap;
+    }
+
+    .math-axis-label {
+      font-family: "STIX Two Math", "Cambria Math", "Times New Roman", serif;
+      font-style: italic;
     }
 
     .header-copy {
@@ -1171,7 +1187,7 @@
           <p class="eyebrow">TRIGONOMETRY LAB</p>
         </div>
         <h1><span class="text-chunk">円を動かして、</span><wbr><span class="text-chunk">三角関数を学ぼう。</span></h1>
-        <p class="header-copy"><span class="text-chunk">点Pを動かして、</span><wbr><span class="text-chunk">x・y・rの比を確かめます。</span></p>
+        <p class="header-copy"><span class="text-chunk">点Pを動かして、</span><wbr><span class="text-chunk"><math class="inline-math" aria-label="x、y、r"><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>r</mi></math> の比を確かめます。</span></p>
       </div>
       <div class="save-status" title="0°から360°まで、17の代表角を確認できます">
         <span class="save-dot" aria-hidden="true"></span>
@@ -1194,7 +1210,7 @@
 
           <div class="circle-stage" id="circleStage">
             <svg id="circleSvg" viewBox="0 0 500 500" role="img" aria-labelledby="svgTitle svgDesc">
-              <title id="svgTitle">半径rの円と円周上の点P</title>
+              <title id="svgTitle">半径𝑟の円と円周上の点P</title>
               <desc id="svgDesc">点Pは指定された角度へ動かせます。直角三角形が作れるときは辺の比も表示します。</desc>
               <defs>
                 <marker id="axisArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
@@ -1203,8 +1219,8 @@
               </defs>
               <line class="axis" x1="34" y1="250" x2="466" y2="250" marker-start="url(#axisArrow)" marker-end="url(#axisArrow)"></line>
               <line class="axis" x1="250" y1="466" x2="250" y2="34" marker-start="url(#axisArrow)" marker-end="url(#axisArrow)"></line>
-              <text class="axis-label" x="470" y="242">x</text>
-              <text class="axis-label" x="260" y="37">y</text>
+              <text class="axis-label math-axis-label" x="470" y="242">𝑥</text>
+              <text class="axis-label math-axis-label" x="260" y="37">𝑦</text>
               <text class="axis-label" x="235" y="272">O</text>
 
               <circle id="unitCircle" class="unit-circle" cx="250" cy="250" r="180"></circle>
@@ -1255,7 +1271,7 @@
           <div class="section-heading">
             <span class="step-badge">STEP 2</span>
             <div>
-              <h2 id="definitionTitle">x・y・rの比を確かめる</h2>
+              <h2 id="definitionTitle"><math class="inline-math" aria-label="x、y、r"><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>r</mi></math> の比を確かめる</h2>
               <p><span class="text-chunk">符号に注意して、</span><wbr><span class="text-chunk">最も簡単な比で確かめます。</span></p>
             </div>
           </div>
@@ -1269,20 +1285,20 @@
           </div>
 
           <div class="value-heading">
-            <h3>x・y・rの比</h3>
-            <small>x : y : r</small>
+            <h3><math class="inline-math" aria-label="x、y、r"><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>r</mi></math> の比</h3>
+            <small><math class="inline-math" aria-label="x 対 y 対 r"><mi>x</mi><mo>:</mo><mi>y</mi><mo>:</mo><mi>r</mi></math></small>
           </div>
           <div class="coordinate-grid">
             <div class="coordinate-card">
-              <span class="symbol">x</span>
+              <span class="symbol"><math class="inline-math" aria-label="x"><mi>x</mi></math></span>
               <strong id="xValue">√3</strong>
             </div>
             <div class="coordinate-card">
-              <span class="symbol">y</span>
+              <span class="symbol"><math class="inline-math" aria-label="y"><mi>y</mi></math></span>
               <strong id="yValue">1</strong>
             </div>
             <div class="coordinate-card">
-              <span class="symbol">r</span>
+              <span class="symbol"><math class="inline-math" aria-label="r"><mi>r</mi></math></span>
               <strong id="rValue">2</strong>
             </div>
           </div>
