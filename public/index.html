@@ -127,6 +127,10 @@
       letter-spacing: -.04em;
     }
 
+    .text-chunk {
+      display: inline-block;
+    }
+
     .header-copy {
       margin: 9px 0 0;
       color: var(--muted);
@@ -998,8 +1002,16 @@
         border-radius: 12px;
       }
 
+      h1 {
+        line-height: 1.3;
+      }
+
       .header-copy {
         font-size: .88rem;
+      }
+
+      .section-heading p {
+        line-height: 1.55;
       }
 
       .save-status {
@@ -1158,8 +1170,8 @@
           </span>
           <p class="eyebrow">TRIGONOMETRY LAB</p>
         </div>
-        <h1>円を動かして、三角関数をつかもう。</h1>
-        <p class="header-copy">点Pを動かし、角度ごとの x・y・r の比を図で確かめます。</p>
+        <h1><span class="text-chunk">円を動かして、</span><wbr><span class="text-chunk">三角関数を学ぼう。</span></h1>
+        <p class="header-copy"><span class="text-chunk">点Pを動かして、</span><wbr><span class="text-chunk">x・y・rの比を確かめます。</span></p>
       </div>
       <div class="save-status" title="0°から360°まで、17の代表角を確認できます">
         <span class="save-dot" aria-hidden="true"></span>
@@ -1176,7 +1188,7 @@
             <span class="step-badge">STEP 1</span>
             <div>
               <h2 id="circleTitle">点Pを円周上で動かす</h2>
-              <p>オレンジの点をドラッグ、または角度ボタンを押します。</p>
+              <p><span class="text-chunk">点Pをドラッグ。</span><wbr><span class="text-chunk">角度ボタンでも選べます。</span></p>
             </div>
           </div>
 
@@ -1232,7 +1244,7 @@
             <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M8 11V7a2 2 0 114 0v3-1a2 2 0 114 0v2-1a2 2 0 114 0v5c0 3.3-2.7 6-6 6h-1.1a6 6 0 01-4.8-2.4L2.4 16a2 2 0 013.1-2.5L8 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-            点Pは指定された角度にぴたっと止まります
+            点Pは選んだ角度に止まります
           </p>
           <div id="angleSelector" class="angle-selector" aria-label="角度を選ぶ"></div>
         </div>
@@ -1243,8 +1255,8 @@
           <div class="section-heading">
             <span class="step-badge">STEP 2</span>
             <div>
-              <h2 id="definitionTitle">x・y・r の比を読み取る</h2>
-              <p>座標の符号に注意しながら、最も簡単な比で確かめましょう。</p>
+              <h2 id="definitionTitle">x・y・rの比を確かめる</h2>
+              <p><span class="text-chunk">符号に注意して、</span><wbr><span class="text-chunk">最も簡単な比で確かめます。</span></p>
             </div>
           </div>
 
@@ -1257,7 +1269,7 @@
           </div>
 
           <div class="value-heading">
-            <h3>x・y・r の比</h3>
+            <h3>x・y・rの比</h3>
             <small>x : y : r</small>
           </div>
           <div class="coordinate-grid">
@@ -1281,7 +1293,7 @@
 
 
     <footer class="site-footer">
-      三角関数ラボ — 円と座標から、x・y・r の比を目で確かめる教材
+      三角関数ラボ — 円と座標で比を学ぶ教材
     </footer>
   </main>
 
