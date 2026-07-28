@@ -159,6 +159,53 @@
       font-size: .98rem;
     }
 
+    .header-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .angle-unit-toggle {
+      display: inline-flex;
+      gap: 3px;
+      padding: 3px;
+      border: 1px solid #c8d8e6;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .82);
+      box-shadow: 0 6px 18px rgba(24, 47, 78, .06);
+    }
+
+    .angle-unit-button {
+      min-height: 36px;
+      padding: 7px 12px;
+      border: 0;
+      border-radius: 999px;
+      color: #50657b;
+      background: transparent;
+      font-size: .78rem;
+      font-weight: 900;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: color .18s ease, background .18s ease, box-shadow .18s ease;
+    }
+
+    .angle-unit-button:hover {
+      color: var(--teal-900);
+      background: var(--teal-50);
+    }
+
+    .angle-unit-button.active {
+      color: white;
+      background: var(--teal-700);
+      box-shadow: 0 5px 12px rgba(8, 118, 129, .22);
+    }
+
+    .radian-value {
+      font-family: "STIX Two Math", "Cambria Math", "Times New Roman", serif;
+    }
+
     .save-status {
       flex: 0 0 auto;
       display: flex;
@@ -298,6 +345,7 @@
       fill: #c35427;
       font-size: 17px;
       font-weight: 900;
+      text-anchor: middle;
     }
 
     .triangle-fill {
@@ -1036,8 +1084,17 @@
         line-height: 1.55;
       }
 
+      .header-actions {
+        justify-content: flex-start;
+      }
+
+      .angle-unit-button {
+        min-height: 34px;
+        padding-inline: 10px;
+      }
+
       .save-status {
-        align-self: flex-start;
+        align-self: auto;
       }
 
       .page-shell {
@@ -1266,7 +1323,7 @@
     }
   </style>
 </head>
-<body>
+<body data-angle-unit="degree">
   <header class="site-header">
     <div class="header-inner">
       <div>
@@ -1283,9 +1340,15 @@
         <h1><span class="text-chunk">円を動かして、</span><wbr><span class="text-chunk">三角関数を学ぼう。</span></h1>
         <p class="header-copy"><span class="text-chunk">点Pを動かして、</span><wbr><span class="text-chunk"><span class="math-expression" aria-label="x、y、r"><var>x</var>, <var>y</var>, <var>r</var></span> の比を確かめます。</span></p>
       </div>
-      <div class="save-status" title="0°から360°まで、17の代表角を確認できます">
-        <span class="save-dot" aria-hidden="true"></span>
-        17の角度に対応
+      <div class="header-actions">
+        <div class="angle-unit-toggle" role="group" aria-label="角度の表示方法">
+          <button class="angle-unit-button active" type="button" data-angle-unit="degree" aria-pressed="true">度数法</button>
+          <button class="angle-unit-button" type="button" data-angle-unit="radian" aria-pressed="false">弧度法</button>
+        </div>
+        <div id="angleRangeStatus" class="save-status" title="0°から360°まで、17の代表角を確認できます">
+          <span class="save-dot" aria-hidden="true"></span>
+          17の角度に対応
+        </div>
       </div>
     </div>
   </header>
@@ -1412,6 +1475,25 @@
       "use strict";
 
       const ANGLES = [0, 30, 45, 60, 90, 120, 135, 150, 180, 210, 225, 240, 270, 300, 315, 330, 360];
+      const RADIAN_LABELS = {
+        0: "0",
+        30: "π/6",
+        45: "π/4",
+        60: "π/3",
+        90: "π/2",
+        120: "2π/3",
+        135: "3π/4",
+        150: "5π/6",
+        180: "π",
+        210: "7π/6",
+        225: "5π/4",
+        240: "4π/3",
+        270: "3π/2",
+        300: "5π/3",
+        315: "7π/4",
+        330: "11π/6",
+        360: "2π"
+      };
       const FUNCTIONS = ["sin", "cos", "tan"];
       const STORAGE_KEY = "trig-circle-lab-answers-v1";
       const SVG_NS = "http://www.w3.org/2000/svg";
@@ -1459,12 +1541,15 @@
       };
 
       let currentAngle = 30;
+      let angleUnit = "degree";
       let answers = loadAnswers();
       let checked = {};
       let dragging = false;
 
       const el = {
         angleSelector: document.getElementById("angleSelector"),
+        angleUnitButtons: document.querySelectorAll(".angle-unit-button"),
+        angleRangeStatus: document.getElementById("angleRangeStatus"),
         currentAngle: document.getElementById("currentAngle"),
         xValue: document.getElementById("xValue"),
         yValue: document.getElementById("yValue"),
@@ -1574,13 +1659,43 @@
         return { x: "1", y: "√3", r: "2" };
       }
 
+      function angleText(angle) {
+        return angleUnit === "radian" ? RADIAN_LABELS[angle] : `${angle}°`;
+      }
+
+      function angleSpeech(angle) {
+        return angleUnit === "radian" ? `${RADIAN_LABELS[angle]}ラジアン` : `${angle}度`;
+      }
+
+      function updateAngleUnitControls() {
+        document.body.dataset.angleUnit = angleUnit;
+        el.angleUnitButtons.forEach(button => {
+          const isActive = button.dataset.angleUnit === angleUnit;
+          button.classList.toggle("active", isActive);
+          button.setAttribute("aria-pressed", String(isActive));
+        });
+        el.angleRangeStatus.title = angleUnit === "radian"
+          ? "0から2πまで、17の代表角を確認できます"
+          : "0°から360°まで、17の代表角を確認できます";
+      }
+
+      function setAngleUnit(unit) {
+        if (unit !== "degree" && unit !== "radian") return;
+        angleUnit = unit;
+        updateAngleUnitControls();
+        renderAngleSelector();
+        updateRatioDisplay();
+        updateDiagram();
+      }
+
       function renderAngleSelector() {
         el.angleSelector.innerHTML = "";
         ANGLES.forEach(angle => {
           const button = document.createElement("button");
           button.type = "button";
-          button.className = `angle-chip${angle === currentAngle ? " active" : ""}`;
-          button.textContent = `${angle}°`;
+          button.className = `angle-chip${angle === currentAngle ? " active" : ""}${angleUnit === "radian" ? " radian-value" : ""}`;
+          button.textContent = angleText(angle);
+          button.setAttribute("aria-label", `${angleSpeech(angle)}を選ぶ`);
           button.setAttribute("aria-pressed", String(angle === currentAngle));
           button.addEventListener("click", () => setAngle(angle, true));
           el.angleSelector.appendChild(button);
@@ -1598,8 +1713,9 @@
           angleTd.className = "angle-cell";
           const angleButton = document.createElement("button");
           angleButton.type = "button";
-          angleButton.textContent = `${angle}°`;
-          angleButton.setAttribute("aria-label", `${angle}度を図に表示`);
+          angleButton.textContent = angleText(angle);
+          angleButton.classList.toggle("radian-value", angleUnit === "radian");
+          angleButton.setAttribute("aria-label", `${angleSpeech(angle)}を図に表示`);
           angleButton.addEventListener("click", () => {
             setAngle(angle, true);
             document.querySelector(".learning-grid").scrollIntoView({ behavior: "smooth", block: "start" });
@@ -1617,7 +1733,7 @@
             input.placeholder = fn === "tan" && (angle === 90 || angle === 270) ? "定義なし" : "入力";
             input.autocomplete = "off";
             input.spellcheck = false;
-            input.setAttribute("aria-label", `${angle}度の${fn}の値`);
+            input.setAttribute("aria-label", `${angleSpeech(angle)}の${fn}の値`);
             applyCheckClass(input, checked[answerKey]);
             input.addEventListener("input", event => updateAnswer(angle, fn, event.target.value, "table"));
             td.appendChild(input);
@@ -1704,7 +1820,8 @@
 
       function updateRatioDisplay() {
         const ratio = RATIOS[currentAngle];
-        el.currentAngle.textContent = `${currentAngle}°`;
+        el.currentAngle.textContent = angleText(currentAngle);
+        el.currentAngle.classList.toggle("radian-value", angleUnit === "radian");
         el.xValue.textContent = ratio.x;
         el.yValue.textContent = ratio.y;
         el.rValue.textContent = ratio.r;
@@ -1761,7 +1878,7 @@
         setSvgPoint(el.pointP, px, py);
         setSvgPoint(el.pointHalo, px, py);
         el.pointGroup.setAttribute("aria-valuenow", currentAngle);
-        el.pointGroup.setAttribute("aria-valuetext", `${currentAngle}度。左右の矢印キーでも動かせます。`);
+        el.pointGroup.setAttribute("aria-valuetext", `${angleSpeech(currentAngle)}。左右の矢印キーでも動かせます。`);
         el.pointLabel.setAttribute("x", px + (px >= CENTER ? 17 : -31));
         el.pointLabel.setAttribute("y", py + (py <= CENTER ? -17 : 29));
 
@@ -1772,9 +1889,10 @@
         el.angleArc.setAttribute("d", arcPath(currentAngle));
         const arcLabelAngle = currentAngle === 360 ? 330 : Math.max(12, Math.min(currentAngle / 2, 330));
         const angleLabelPoint = polarPoint(76, arcLabelAngle);
-        el.angleArcLabel.setAttribute("x", angleLabelPoint.x - 10);
+        el.angleArcLabel.setAttribute("x", angleLabelPoint.x);
         el.angleArcLabel.setAttribute("y", angleLabelPoint.y + 5);
-        el.angleArcLabel.textContent = currentAngle === 0 ? "0°" : `${currentAngle}°`;
+        el.angleArcLabel.textContent = angleText(currentAngle);
+        el.angleArcLabel.classList.toggle("radian-value", angleUnit === "radian");
 
         el.axisNote.hidden = hasTriangle;
         [el.triangleFill, el.horizontalSide, el.verticalSide, el.rightAngle,
@@ -1874,8 +1992,8 @@
         const correctCount = FUNCTIONS.filter(fn => checked[key(currentAngle, fn)] === true).length;
         el.checkMessage.className = `check-message ${correctCount === 3 ? "success" : "notice"}`;
         el.checkMessage.textContent = correctCount === 3
-          ? `${currentAngle}°は全問正解です！`
-          : `${currentAngle}°は ${correctCount} / 3 問正解です。`;
+          ? `${angleText(currentAngle)}は全問正解です！`
+          : `${angleText(currentAngle)}は ${correctCount} / 3 問正解です。`;
       }
 
       function checkAll() {
@@ -1937,7 +2055,7 @@
         renderTable();
         updateProgress();
         el.checkMessage.className = "check-message";
-        el.checkMessage.textContent = `${currentAngle}°の答えを表示しました。`;
+        el.checkMessage.textContent = `${angleText(currentAngle)}の答えを表示しました。`;
       }
 
       function resetAll() {
@@ -1951,6 +2069,10 @@
         el.checkMessage.className = "check-message";
         el.checkMessage.textContent = "すべての入力を消しました。";
       }
+
+      el.angleUnitButtons.forEach(button => {
+        button.addEventListener("click", () => setAngleUnit(button.dataset.angleUnit));
+      });
 
       el.circleSvg.addEventListener("pointerdown", beginDrag);
       el.circleSvg.addEventListener("pointermove", moveDrag);
@@ -1966,6 +2088,7 @@
         setAngle(ANGLES[nextIndex], true);
       });
 
+      updateAngleUnitControls();
       setAngle(currentAngle);
     })();
   </script>
