@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0d6872">
-  <meta name="description" content="円上の点Pを動かし、三角関数の定義からsin・cos・tanの表を完成させる学習教材です。">
+  <meta name="description" content="円上の点Pを動かし、角度ごとのx・y・rの比を視覚的に確かめる学習教材です。">
   <title>三角関数ラボ｜円を動かして学ぼう</title>
   <style>
     :root {
@@ -1159,11 +1159,11 @@
           <p class="eyebrow">TRIGONOMETRY LAB</p>
         </div>
         <h1>円を動かして、三角関数をつかもう。</h1>
-        <p class="header-copy">点Pを動かし、定義から考えて、最後に表を完成させます。</p>
+        <p class="header-copy">点Pを動かし、角度ごとの x・y・r の比を図で確かめます。</p>
       </div>
-      <div class="save-status" title="入力内容はこの端末に自動保存されます">
+      <div class="save-status" title="0°から360°まで、17の代表角を確認できます">
         <span class="save-dot" aria-hidden="true"></span>
-        入力を自動保存
+        17の角度に対応
       </div>
     </div>
   </header>
@@ -1243,8 +1243,8 @@
           <div class="section-heading">
             <span class="step-badge">STEP 2</span>
             <div>
-              <h2 id="definitionTitle">定義に当てはめて考える</h2>
-              <p>辺の向きに注意して、符号まで考えましょう。</p>
+              <h2 id="definitionTitle">x・y・r の比を読み取る</h2>
+              <p>座標の符号に注意しながら、最も簡単な比で確かめましょう。</p>
             </div>
           </div>
 
@@ -1257,105 +1257,27 @@
           </div>
 
           <div class="value-heading">
-            <h3>点Pの座標と半径</h3>
-            <small>P（x, y）</small>
+            <h3>x・y・r の比</h3>
+            <small>x : y : r</small>
           </div>
           <div class="coordinate-grid">
             <div class="coordinate-card">
               <span class="symbol">x</span>
-              <strong id="xValue">√3r / 2</strong>
+              <strong id="xValue">√3</strong>
             </div>
             <div class="coordinate-card">
               <span class="symbol">y</span>
-              <strong id="yValue">r / 2</strong>
+              <strong id="yValue">1</strong>
             </div>
             <div class="coordinate-card">
               <span class="symbol">r</span>
-              <strong id="rValue">r</strong>
+              <strong id="rValue">2</strong>
             </div>
           </div>
 
-          <div class="definition-block">
-            <h3>三角関数の定義</h3>
-            <div class="definition-list">
-              <div class="definition-row">
-                <span class="function-name">sin θ</span>
-                <span class="formula">= y / r</span>
-                <span id="sinSub" class="substitution">（r/2）÷ r</span>
-              </div>
-              <div class="definition-row">
-                <span class="function-name">cos θ</span>
-                <span class="formula">= x / r</span>
-                <span id="cosSub" class="substitution">（√3r/2）÷ r</span>
-              </div>
-              <div class="definition-row">
-                <span class="function-name">tan θ</span>
-                <span class="formula">= y / x</span>
-                <span id="tanSub" class="substitution">（r/2）÷（√3r/2）</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="practice-block">
-            <h3><span id="practiceAngle">30°</span> の値を入力</h3>
-            <p class="practice-lead">例：√3/2、-1、定義なし</p>
-            <div id="currentInputs" class="current-inputs"></div>
-            <div class="mini-actions">
-              <button id="checkCurrentBtn" class="btn btn-primary" type="button">この角度を判定</button>
-              <button id="hintBtn" class="btn btn-secondary" type="button">ヒント</button>
-              <button id="revealBtn" class="btn btn-secondary" type="button">この行の答え</button>
-            </div>
-            <div id="hintBox" class="hint-box" role="status"></div>
-          </div>
         </div>
       </section>
     </div>
-
-    <section class="panel table-panel" aria-labelledby="tableTitle">
-      <div class="panel-pad">
-        <div class="table-head">
-          <div class="section-heading">
-            <span class="step-badge">STEP 3</span>
-            <div>
-              <h2 id="tableTitle">三角関数の表を完成させる</h2>
-              <p>空欄を埋めて、答え合わせをしましょう。角度を押すと円も動きます。</p>
-            </div>
-          </div>
-          <div class="progress-wrap" aria-label="入力の進み具合">
-            <div class="progress-copy">
-              <span>入力済み</span>
-              <strong id="progressText">0 / 51</strong>
-            </div>
-            <div class="progress-track">
-              <div id="progressBar" class="progress-bar"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="table-scroll">
-          <table class="trig-table">
-            <thead>
-              <tr>
-                <th scope="col">θ</th>
-                <th scope="col">sin θ = y / r</th>
-                <th scope="col">cos θ = x / r</th>
-                <th scope="col">tan θ = y / x</th>
-              </tr>
-            </thead>
-            <tbody id="trigTableBody"></tbody>
-          </table>
-        </div>
-
-        <div class="table-tools">
-          <div class="table-actions">
-            <button id="checkAllBtn" class="btn btn-primary" type="button">すべて答え合わせ</button>
-            <button id="printBtn" class="btn btn-secondary" type="button">表を印刷</button>
-            <button id="resetBtn" class="btn btn-danger" type="button">すべて消す</button>
-          </div>
-          <p id="checkMessage" class="check-message" aria-live="polite">正確な値で入力しましょう。</p>
-        </div>
-      </div>
-    </section>
 
     <aside class="legend-panel" aria-label="図の見方">
       <div class="legend-card">
@@ -1373,7 +1295,7 @@
     </aside>
 
     <footer class="site-footer">
-      三角関数ラボ — 円と座標から、定義を目で確かめる教材
+      三角関数ラボ — 円と座標から、x・y・r の比を目で確かめる教材
     </footer>
   </main>
 
@@ -1387,6 +1309,26 @@
       const SVG_NS = "http://www.w3.org/2000/svg";
       const CENTER = 250;
       const RADIUS = 180;
+
+      const RATIOS = {
+        0:   { x: "1",   y: "0",   r: "1" },
+        30:  { x: "√3",  y: "1",   r: "2" },
+        45:  { x: "1",   y: "1",   r: "√2" },
+        60:  { x: "1",   y: "√3",  r: "2" },
+        90:  { x: "0",   y: "1",   r: "1" },
+        120: { x: "−1",  y: "√3",  r: "2" },
+        135: { x: "−1",  y: "1",   r: "√2" },
+        150: { x: "−√3", y: "1",   r: "2" },
+        180: { x: "−1",  y: "0",   r: "1" },
+        210: { x: "−√3", y: "−1",  r: "2" },
+        225: { x: "−1",  y: "−1",  r: "√2" },
+        240: { x: "−1",  y: "−√3", r: "2" },
+        270: { x: "0",   y: "−1",  r: "1" },
+        300: { x: "1",   y: "−√3", r: "2" },
+        315: { x: "1",   y: "−1",  r: "√2" },
+        330: { x: "√3",  y: "−1",  r: "2" },
+        360: { x: "1",   y: "0",   r: "1" }
+      };
 
       const DATA = {
         0:   { x: "r",         y: "0",          sin: "0",       cos: "1",        tan: "0" },
@@ -1416,9 +1358,9 @@
       const el = {
         angleSelector: document.getElementById("angleSelector"),
         currentAngle: document.getElementById("currentAngle"),
-        practiceAngle: document.getElementById("practiceAngle"),
         xValue: document.getElementById("xValue"),
         yValue: document.getElementById("yValue"),
+        rValue: document.getElementById("rValue"),
         sinSub: document.getElementById("sinSub"),
         cosSub: document.getElementById("cosSub"),
         tanSub: document.getElementById("tanSub"),
@@ -1652,18 +1594,12 @@
         return displayCompact(value);
       }
 
-      function updateDefinition() {
-        const data = DATA[currentAngle];
+      function updateRatioDisplay() {
+        const ratio = RATIOS[currentAngle];
         el.currentAngle.textContent = `${currentAngle}°`;
-        el.practiceAngle.textContent = `${currentAngle}°`;
-        el.xValue.textContent = data.x;
-        el.yValue.textContent = data.y;
-
-        el.sinSub.textContent = `（${substitution(data.y)}）÷ r`;
-        el.cosSub.textContent = `（${substitution(data.x)}）÷ r`;
-        el.tanSub.textContent = data.x === "0"
-          ? "x = 0 のため定義なし"
-          : `（${substitution(data.y)}）÷（${substitution(data.x)}）`;
+        el.xValue.textContent = ratio.x;
+        el.yValue.textContent = ratio.y;
+        el.rValue.textContent = ratio.r;
       }
 
       function setSvgPoint(element, x, y) {
@@ -1766,13 +1702,9 @@
 
       function setAngle(angle, scrollChip = false) {
         currentAngle = angle;
-        el.hintBox.classList.remove("show");
         renderAngleSelector();
-        renderTable();
-        renderCurrentInputs();
-        updateDefinition();
+        updateRatioDisplay();
         updateDiagram();
-        updateProgress();
 
         if (scrollChip) {
           requestAnimationFrame(() => {
@@ -1925,13 +1857,6 @@
         const nextIndex = Math.max(0, Math.min(ANGLES.length - 1, index + direction));
         setAngle(ANGLES[nextIndex], true);
       });
-
-      document.getElementById("checkCurrentBtn").addEventListener("click", checkCurrent);
-      document.getElementById("checkAllBtn").addEventListener("click", checkAll);
-      document.getElementById("hintBtn").addEventListener("click", showHint);
-      document.getElementById("revealBtn").addEventListener("click", revealCurrent);
-      document.getElementById("resetBtn").addEventListener("click", resetAll);
-      document.getElementById("printBtn").addEventListener("click", () => window.print());
 
       setAngle(currentAngle);
     })();
