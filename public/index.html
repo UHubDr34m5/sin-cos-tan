@@ -206,6 +206,51 @@
       font-family: "STIX Two Math", "Cambria Math", "Times New Roman", serif;
     }
 
+    .math-fraction {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: center;
+      min-width: 1.2em;
+      vertical-align: middle;
+      line-height: 1;
+    }
+
+    .math-fraction__numerator,
+    .math-fraction__denominator {
+      display: block;
+      padding-inline: .14em;
+      text-align: center;
+      line-height: .9;
+    }
+
+    .math-fraction__bar {
+      display: block;
+      width: 100%;
+      margin: .09em 0 .07em;
+      border-top: .075em solid currentColor;
+    }
+
+    .angle-chip.radian-value {
+      min-height: 56px;
+      padding-block: 5px;
+    }
+
+    .angle-chip .math-fraction {
+      font-size: .94em;
+    }
+
+    .current-angle-card strong.radian-value {
+      display: inline-flex;
+      align-items: center;
+      min-height: 1.55em;
+      line-height: 1;
+    }
+
+    .current-angle-card strong .math-fraction {
+      font-size: .66em;
+    }
+
     .save-status {
       flex: 0 0 auto;
       display: flex;
@@ -346,6 +391,17 @@
       font-size: 17px;
       font-weight: 900;
       text-anchor: middle;
+    }
+
+    .angle-label .angle-fraction-part {
+      font-size: 14px;
+      dominant-baseline: central;
+    }
+
+    .angle-label .angle-fraction-bar {
+      stroke: #c35427;
+      stroke-width: 1.6;
+      stroke-linecap: round;
     }
 
     .triangle-fill {
@@ -1388,7 +1444,7 @@
               <path id="rightAngle" class="right-angle"></path>
               <line id="pointGuide" class="point-guide"></line>
               <path id="angleArc" class="angle-arc"></path>
-              <text id="angleArcLabel" class="angle-label"></text>
+              <g id="angleArcLabel" class="angle-label"></g>
               <circle class="origin-point" cx="250" cy="250" r="5"></circle>
 
               <g id="horizontalBadge" class="ratio-badge horizontal">
@@ -1663,6 +1719,75 @@
         return angleUnit === "radian" ? RADIAN_LABELS[angle] : `${angle}°`;
       }
 
+      function angleFraction(angle) {
+        if (angleUnit !== "radian") return null;
+        const [numerator, denominator] = RADIAN_LABELS[angle].split("/");
+        return denominator ? { numerator, denominator } : null;
+      }
+
+      function renderHtmlAngle(container, angle) {
+        container.replaceChildren();
+        const fraction = angleFraction(angle);
+
+        if (!fraction) {
+          container.textContent = angleText(angle);
+          return;
+        }
+
+        const wrapper = document.createElement("span");
+        wrapper.className = "math-fraction";
+        wrapper.setAttribute("aria-hidden", "true");
+
+        const numerator = document.createElement("span");
+        numerator.className = "math-fraction__numerator";
+        numerator.textContent = fraction.numerator;
+
+        const bar = document.createElement("span");
+        bar.className = "math-fraction__bar";
+
+        const denominator = document.createElement("span");
+        denominator.className = "math-fraction__denominator";
+        denominator.textContent = fraction.denominator;
+
+        wrapper.append(numerator, bar, denominator);
+        container.appendChild(wrapper);
+      }
+
+      function renderSvgAngle(angle, x, y) {
+        el.angleArcLabel.replaceChildren();
+        el.angleArcLabel.setAttribute("transform", `translate(${x} ${y})`);
+        const fraction = angleFraction(angle);
+
+        if (!fraction) {
+          const text = document.createElementNS(SVG_NS, "text");
+          text.setAttribute("dominant-baseline", "central");
+          text.textContent = angleText(angle);
+          el.angleArcLabel.appendChild(text);
+          return;
+        }
+
+        const numerator = document.createElementNS(SVG_NS, "text");
+        numerator.setAttribute("class", "angle-fraction-part");
+        numerator.setAttribute("y", "-9");
+        numerator.textContent = fraction.numerator;
+
+        const denominator = document.createElementNS(SVG_NS, "text");
+        denominator.setAttribute("class", "angle-fraction-part");
+        denominator.setAttribute("y", "9");
+        denominator.textContent = fraction.denominator;
+
+        const widestLength = Math.max(fraction.numerator.length, fraction.denominator.length);
+        const halfBarWidth = 6 + widestLength * 4;
+        const bar = document.createElementNS(SVG_NS, "line");
+        bar.setAttribute("class", "angle-fraction-bar");
+        bar.setAttribute("x1", -halfBarWidth);
+        bar.setAttribute("x2", halfBarWidth);
+        bar.setAttribute("y1", "0");
+        bar.setAttribute("y2", "0");
+
+        el.angleArcLabel.append(numerator, bar, denominator);
+      }
+
       function angleSpeech(angle) {
         return angleUnit === "radian" ? `${RADIAN_LABELS[angle]}ラジアン` : `${angle}度`;
       }
@@ -1694,7 +1819,7 @@
           const button = document.createElement("button");
           button.type = "button";
           button.className = `angle-chip${angle === currentAngle ? " active" : ""}${angleUnit === "radian" ? " radian-value" : ""}`;
-          button.textContent = angleText(angle);
+          renderHtmlAngle(button, angle);
           button.setAttribute("aria-label", `${angleSpeech(angle)}を選ぶ`);
           button.setAttribute("aria-pressed", String(angle === currentAngle));
           button.addEventListener("click", () => setAngle(angle, true));
@@ -1713,7 +1838,7 @@
           angleTd.className = "angle-cell";
           const angleButton = document.createElement("button");
           angleButton.type = "button";
-          angleButton.textContent = angleText(angle);
+          renderHtmlAngle(angleButton, angle);
           angleButton.classList.toggle("radian-value", angleUnit === "radian");
           angleButton.setAttribute("aria-label", `${angleSpeech(angle)}を図に表示`);
           angleButton.addEventListener("click", () => {
@@ -1820,8 +1945,9 @@
 
       function updateRatioDisplay() {
         const ratio = RATIOS[currentAngle];
-        el.currentAngle.textContent = angleText(currentAngle);
+        renderHtmlAngle(el.currentAngle, currentAngle);
         el.currentAngle.classList.toggle("radian-value", angleUnit === "radian");
+        el.currentAngle.setAttribute("aria-label", angleSpeech(currentAngle));
         el.xValue.textContent = ratio.x;
         el.yValue.textContent = ratio.y;
         el.rValue.textContent = ratio.r;
@@ -1889,10 +2015,9 @@
         el.angleArc.setAttribute("d", arcPath(currentAngle));
         const arcLabelAngle = currentAngle === 360 ? 330 : Math.max(12, Math.min(currentAngle / 2, 330));
         const angleLabelPoint = polarPoint(76, arcLabelAngle);
-        el.angleArcLabel.setAttribute("x", angleLabelPoint.x);
-        el.angleArcLabel.setAttribute("y", angleLabelPoint.y + 5);
-        el.angleArcLabel.textContent = angleText(currentAngle);
+        renderSvgAngle(currentAngle, angleLabelPoint.x, angleLabelPoint.y + 5);
         el.angleArcLabel.classList.toggle("radian-value", angleUnit === "radian");
+        el.angleArcLabel.setAttribute("aria-label", angleSpeech(currentAngle));
 
         el.axisNote.hidden = hasTriangle;
         [el.triangleFill, el.horizontalSide, el.verticalSide, el.rightAngle,
