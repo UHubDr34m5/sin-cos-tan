@@ -1741,7 +1741,7 @@
         const [rawNumerator, denominator] = RADIAN_LABELS[angle].split("/");
         if (!denominator) return null;
 
-        const keepPiInNumerator = [30, 45, 60].includes(angle);
+        const keepPiInNumerator = [30, 45, 60, 90].includes(angle);
         if (keepPiInNumerator) {
           return { numerator: rawNumerator, denominator, piOutside: false };
         }
