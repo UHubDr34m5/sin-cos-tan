@@ -206,13 +206,21 @@
       font-family: "STIX Two Math", "Cambria Math", "Times New Roman", serif;
     }
 
+    .math-fraction-expression {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .08em;
+      vertical-align: middle;
+      line-height: 1;
+    }
+
     .math-fraction {
       display: inline-flex;
       flex-direction: column;
       align-items: stretch;
       justify-content: center;
       min-width: 1.2em;
-      vertical-align: middle;
       line-height: 1;
     }
 
@@ -231,12 +239,16 @@
       border-top: .075em solid currentColor;
     }
 
+    .math-fraction-pi {
+      line-height: 1;
+    }
+
     .angle-chip.radian-value {
       min-height: 56px;
       padding-block: 5px;
     }
 
-    .angle-chip .math-fraction {
+    .angle-chip .math-fraction-expression {
       font-size: .94em;
     }
 
@@ -247,7 +259,7 @@
       line-height: 1;
     }
 
-    .current-angle-card strong .math-fraction {
+    .current-angle-card strong .math-fraction-expression {
       font-size: .66em;
     }
 
@@ -402,6 +414,11 @@
       stroke: #c35427;
       stroke-width: 1.6;
       stroke-linecap: round;
+    }
+
+    .angle-label .angle-fraction-pi {
+      font-size: 16px;
+      dominant-baseline: central;
     }
 
     .triangle-fill {
@@ -1721,8 +1738,16 @@
 
       function angleFraction(angle) {
         if (angleUnit !== "radian") return null;
-        const [numerator, denominator] = RADIAN_LABELS[angle].split("/");
-        return denominator ? { numerator, denominator } : null;
+        const [rawNumerator, denominator] = RADIAN_LABELS[angle].split("/");
+        if (!denominator) return null;
+
+        const keepPiInNumerator = [30, 45, 60].includes(angle);
+        if (keepPiInNumerator) {
+          return { numerator: rawNumerator, denominator, piOutside: false };
+        }
+
+        const coefficient = rawNumerator.replace("π", "") || "1";
+        return { numerator: coefficient, denominator, piOutside: true };
       }
 
       function renderHtmlAngle(container, angle) {
@@ -1734,9 +1759,12 @@
           return;
         }
 
+        const expression = document.createElement("span");
+        expression.className = "math-fraction-expression";
+        expression.setAttribute("aria-hidden", "true");
+
         const wrapper = document.createElement("span");
         wrapper.className = "math-fraction";
-        wrapper.setAttribute("aria-hidden", "true");
 
         const numerator = document.createElement("span");
         numerator.className = "math-fraction__numerator";
@@ -1750,7 +1778,16 @@
         denominator.textContent = fraction.denominator;
 
         wrapper.append(numerator, bar, denominator);
-        container.appendChild(wrapper);
+        expression.appendChild(wrapper);
+
+        if (fraction.piOutside) {
+          const pi = document.createElement("span");
+          pi.className = "math-fraction-pi";
+          pi.textContent = "π";
+          expression.appendChild(pi);
+        }
+
+        container.appendChild(expression);
       }
 
       function renderSvgAngle(angle, x, y) {
@@ -1766,26 +1803,41 @@
           return;
         }
 
+        const widestLength = Math.max(fraction.numerator.length, fraction.denominator.length);
+        const halfBarWidth = 6 + widestLength * 4;
+        const piWidth = fraction.piOutside ? 10 : 0;
+        const gap = fraction.piOutside ? 2 : 0;
+        const fractionCenter = -(piWidth + gap) / 2;
+
         const numerator = document.createElementNS(SVG_NS, "text");
         numerator.setAttribute("class", "angle-fraction-part");
+        numerator.setAttribute("x", fractionCenter);
         numerator.setAttribute("y", "-9");
         numerator.textContent = fraction.numerator;
 
         const denominator = document.createElementNS(SVG_NS, "text");
         denominator.setAttribute("class", "angle-fraction-part");
+        denominator.setAttribute("x", fractionCenter);
         denominator.setAttribute("y", "9");
         denominator.textContent = fraction.denominator;
 
-        const widestLength = Math.max(fraction.numerator.length, fraction.denominator.length);
-        const halfBarWidth = 6 + widestLength * 4;
         const bar = document.createElementNS(SVG_NS, "line");
         bar.setAttribute("class", "angle-fraction-bar");
-        bar.setAttribute("x1", -halfBarWidth);
-        bar.setAttribute("x2", halfBarWidth);
+        bar.setAttribute("x1", fractionCenter - halfBarWidth);
+        bar.setAttribute("x2", fractionCenter + halfBarWidth);
         bar.setAttribute("y1", "0");
         bar.setAttribute("y2", "0");
 
         el.angleArcLabel.append(numerator, bar, denominator);
+
+        if (fraction.piOutside) {
+          const pi = document.createElementNS(SVG_NS, "text");
+          pi.setAttribute("class", "angle-fraction-pi");
+          pi.setAttribute("x", halfBarWidth + gap / 2);
+          pi.setAttribute("y", "0");
+          pi.textContent = "π";
+          el.angleArcLabel.appendChild(pi);
+        }
       }
 
       function angleSpeech(angle) {
